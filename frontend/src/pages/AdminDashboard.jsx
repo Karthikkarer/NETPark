@@ -532,9 +532,7 @@ export default function AdminDashboard() {
                     <button className={`btn-primary ${activeTab === 'alpr' ? '' : 'inactive'}`} style={{ textAlign: 'left', background: activeTab === 'alpr' ? '' : 'transparent', border: activeTab === 'alpr' ? '' : 'none', color: activeTab === 'alpr' ? '#fff' : '#aaa', display: 'flex', alignItems: 'center' }} onClick={() => setActiveTab('alpr')}>
                         <Camera size={18} style={{ marginRight: '10px', verticalAlign: 'middle' }} /> AI Scanner
                     </button>
-                    <button className={`btn-primary ${activeTab === 'reviews' ? '' : 'inactive'}`} style={{ textAlign: 'left', background: activeTab === 'reviews' ? '' : 'transparent', border: activeTab === 'reviews' ? '' : 'none', color: activeTab === 'reviews' ? '#fff' : '#aaa', display: 'flex', alignItems: 'center' }} onClick={() => setActiveTab('reviews')}>
-                        <MessageSquare size={18} style={{ marginRight: '10px', verticalAlign: 'middle' }} /> Customer Reviews
-                    </button>
+
                     {loggedUser.isMaster && (
                         <button className={`btn-primary ${activeTab === 'master' ? '' : 'inactive'}`} style={{ textAlign: 'left', background: activeTab === 'master' ? '' : 'transparent', border: activeTab === 'master' ? '' : 'none', color: activeTab === 'master' ? '#fff' : '#aaa', display: 'flex', alignItems: 'center' }} onClick={() => setActiveTab('master')}>
                             <ShieldCheck size={18} style={{ marginRight: '10px', verticalAlign: 'middle' }} /> Master Controls
@@ -944,41 +942,7 @@ export default function AdminDashboard() {
                         </motion.div>
                     )}
 
-                    {activeTab === 'reviews' && (
-                        <motion.div key="reviews" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="card" style={{ minHeight: '600px' }}>
-                            <h2 style={{ margin: '0 0 30px 0', color: 'var(--royal-gold)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <MessageSquare size={24} /> Verified User Reviews
-                            </h2>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
-                                {reviews.length === 0 ? (
-                                    <div style={{ textAlign: 'center', color: '#888', padding: '40px' }}>No reviews have been collected yet.</div>
-                                ) : (
-                                    reviews.map(r => (
-                                        <div key={r._id} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '20px' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                                                <div>
-                                                    <div style={{ color: '#fff', fontWeight: 'bold', fontFamily: 'monospace' }}>{r.email}</div>
-                                                    <div style={{ fontSize: '13px', color: '#aaa', marginTop: '2px', fontFamily: 'monospace' }}>{r.phone || 'Not Provided'}</div>
-                                                    {r.transactionId && <div style={{ fontSize: '11px', color: '#777', marginTop: '4px' }}>Transaction Ref: {r.transactionId.slice(-6).toUpperCase()}</div>}
-                                                </div>
-                                                <div style={{ display: 'flex', gap: '2px' }}>
-                                                    {[1,2,3,4,5].map(n => (
-                                                        <Star key={n} size={16} fill={n <= r.rating ? '#FFB703' : 'transparent'} color={n <= r.rating ? '#FFB703' : '#555'} />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div style={{ color: '#ddd', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--royal-purple)', padding: '15px', borderRadius: '8px', fontSize: '14px', lineHeight: '1.6', fontStyle: 'italic' }}>
-                                                "{r.comment}"
-                                            </div>
-                                            <div style={{ textAlign: 'right', fontSize: '11px', color: '#666', marginTop: '10px' }}>
-                                                {new Date(r.createdAt).toLocaleString()}
-                                            </div>
-                                        </div>
-                                    ))
-                                )}
-                            </div>
-                        </motion.div>
-                    )}
+
 
                     {activeTab === 'alpr' && (
                         <motion.div key="alpr" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="card" style={{ minHeight: '600px' }}>
