@@ -800,17 +800,29 @@ export default function AdminDashboard() {
                         <motion.div key="finance" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ minHeight: '600px' }}>
                             <div className="card" style={{ marginBottom: '30px' }}>
                                 <h2 style={{ margin: '0 0 20px 0', color: '#00f5d4' }}><Car size={24} style={{ verticalAlign: 'middle', marginRight: '10px' }} /> Live Present Vehicles (Parked Now)</h2>
-                                {renderTransactions(bookings.filter(b => (b.entryTime && !b.exitTime) || (b.startMs <= Date.now() && b.endMs > Date.now() && !b.exitTime)))}
+                                {renderTransactions(
+                                    bookings
+                                        .filter(b => b.startMs <= Date.now() && b.endMs > Date.now() && !b.exitTime && b.status !== 'Cancelled')
+                                        .sort((x, y) => x.startMs - y.startMs)
+                                )}
                             </div>
                             
                             <div className="card" style={{ marginBottom: '30px' }}>
                                 <h2 style={{ margin: '0 0 20px 0', color: '#f15bb5' }}><LayoutGrid size={24} style={{ verticalAlign: 'middle', marginRight: '10px' }} /> Pre-Booked (Arriving Later)</h2>
-                                {renderTransactions(bookings.filter(b => b.startMs > Date.now() && !b.entryTime && !b.exitTime))}
+                                {renderTransactions(
+                                    bookings
+                                        .filter(b => b.startMs > Date.now() && !b.exitTime && b.status !== 'Cancelled')
+                                        .sort((x, y) => x.startMs - y.startMs)
+                                )}
                             </div>
 
                             <div className="card">
                                 <h2 style={{ margin: '0 0 20px 0', color: 'var(--royal-gold)' }}><FileText size={24} style={{ verticalAlign: 'middle', marginRight: '10px' }} /> Transaction History (Completed)</h2>
-                                {renderTransactions(bookings.filter(b => b.exitTime || b.status === 'Completed' || b.status === 'Cancelled' || (b.endMs <= Date.now() && !b.entryTime)))}
+                                {renderTransactions(
+                                    bookings
+                                        .filter(b => b.endMs <= Date.now() || b.exitTime || b.status === 'Cancelled')
+                                        .sort((x, y) => y.endMs - x.endMs)
+                                )}
                             </div>
                         </motion.div>
                     )}
@@ -898,17 +910,29 @@ export default function AdminDashboard() {
                                 <>
                                     <div className="card" style={{ marginBottom: '30px' }}>
                                         <h2 style={{ margin: '0 0 20px 0', color: '#00f5d4' }}><Car size={18} style={{ verticalAlign: 'middle', marginRight: '10px' }} /> Live Matches</h2>
-                                        {renderTransactions(bookings.filter(b => ((b.entryTime && !b.exitTime) || (b.startMs <= Date.now() && b.endMs > Date.now() && !b.exitTime)) && (b.carNumber?.toLowerCase().includes(searchQuery.toLowerCase()) || b.userName?.toLowerCase().includes(searchQuery.toLowerCase()) || b._id?.toLowerCase().includes(searchQuery.toLowerCase()))))}
+                                        {renderTransactions(
+                                            bookings
+                                                .filter(b => b.startMs <= Date.now() && b.endMs > Date.now() && !b.exitTime && b.status !== 'Cancelled' && (b.carNumber?.toLowerCase().includes(searchQuery.toLowerCase()) || b.userName?.toLowerCase().includes(searchQuery.toLowerCase()) || b._id?.toLowerCase().includes(searchQuery.toLowerCase())))
+                                                .sort((x, y) => x.startMs - y.startMs)
+                                        )}
                                     </div>
 
                                     <div className="card" style={{ marginBottom: '30px' }}>
                                         <h2 style={{ margin: '0 0 20px 0', color: '#f15bb5' }}><LayoutGrid size={18} style={{ verticalAlign: 'middle', marginRight: '10px' }} /> Pre-Booked Matches</h2>
-                                        {renderTransactions(bookings.filter(b => (b.startMs > Date.now() && !b.entryTime && !b.exitTime) && (b.carNumber?.toLowerCase().includes(searchQuery.toLowerCase()) || b.userName?.toLowerCase().includes(searchQuery.toLowerCase()) || b._id?.toLowerCase().includes(searchQuery.toLowerCase()))))}
+                                        {renderTransactions(
+                                            bookings
+                                                .filter(b => b.startMs > Date.now() && !b.exitTime && b.status !== 'Cancelled' && (b.carNumber?.toLowerCase().includes(searchQuery.toLowerCase()) || b.userName?.toLowerCase().includes(searchQuery.toLowerCase()) || b._id?.toLowerCase().includes(searchQuery.toLowerCase())))
+                                                .sort((x, y) => x.startMs - y.startMs)
+                                        )}
                                     </div>
 
                                     <div className="card">
                                         <h2 style={{ margin: '0 0 20px 0', color: 'var(--royal-gold)' }}><FileText size={18} style={{ verticalAlign: 'middle', marginRight: '10px' }} /> Historical Matches</h2>
-                                        {renderTransactions(bookings.filter(b => (b.exitTime || b.status === 'Completed' || b.status === 'Cancelled' || (b.endMs <= Date.now() && !b.entryTime)) && (b.carNumber?.toLowerCase().includes(searchQuery.toLowerCase()) || b.userName?.toLowerCase().includes(searchQuery.toLowerCase()) || b._id?.toLowerCase().includes(searchQuery.toLowerCase()))))}
+                                        {renderTransactions(
+                                            bookings
+                                                .filter(b => (b.endMs <= Date.now() || b.exitTime || b.status === 'Cancelled') && (b.carNumber?.toLowerCase().includes(searchQuery.toLowerCase()) || b.userName?.toLowerCase().includes(searchQuery.toLowerCase()) || b._id?.toLowerCase().includes(searchQuery.toLowerCase())))
+                                                .sort((x, y) => y.endMs - x.endMs)
+                                        )}
                                     </div>
                                 </>
                             ) : (
