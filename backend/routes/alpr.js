@@ -91,17 +91,12 @@ router.post('/scan', upload.single('image'), async (req, res) => {
         const activeBookings = await Booking.find({ status: { $ne: 'Cancelled' } });
         let matchedBooking = null;
 
-        // DEMO OVERRIDE: For testing without a real license plate, we bypass strict security if we have active bookings
-        if (!cleanedOCR || cleanedOCR.length < 4) {
-             if (activeBookings.length > 0) {
-                 matchedBooking = activeBookings[0];
-                 rawText = "SIMULATED_DEMO_SCAN";
-             } else {
-                 return res.status(400).json({ 
-                     error: 'AI Scan Failure: Captured text is too short or noisy. (No active bookings to simulate a demo scan either)',
-                     detectedText: rawText || 'NO READABLE TEXT'
-                 });
-             }
+        // If the OCR text is too short or empty, reject with a helpful camera positioning warning
+        if (!cleanedOCR || cleanedOCR.length < 3) {
+             return res.status(400).json({ 
+                 error: 'Camera Focus Warning: Unable to resolve plate characters. Please align the license plate clearly inside the green viewfinder boxes.',
+                 detectedText: rawText || 'NO READABLE TEXT'
+             });
         } else {
             const normOCR = normalizePlate(cleanedOCR);
             let bestMatch = null;
@@ -130,11 +125,6 @@ router.post('/scan', upload.single('image'), async (req, res) => {
             if (bestMatch && highestSimilarity >= 0.65) {
                 matchedBooking = bestMatch;
                 console.log(`[FUZZY OCR MATCH SUCCESS]: Matched ${matchedBooking.carNumber} with similarity score ${Math.round(highestSimilarity*100)}%`);
-            }
-
-            // Fallback for Demo if OCR found text but didn't match perfectly
-            if (!matchedBooking && activeBookings.length > 0) {
-                 matchedBooking = activeBookings[0];
             }
         }
 

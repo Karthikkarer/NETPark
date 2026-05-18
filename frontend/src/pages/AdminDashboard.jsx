@@ -373,14 +373,28 @@ export default function AdminDashboard() {
         const video = videoRef.current;
         const canvas = canvasRef.current;
         
-        // High-Quality Snapshot Capture
-        canvas.width = video.videoWidth || 1280;
-        canvas.height = video.videoHeight || 720;
+        const videoWidth = video.videoWidth || 1280;
+        const videoHeight = video.videoHeight || 720;
+        
+        // Focus on the central 70% width and 45% height where the license plate is aligned
+        const cropWidth = videoWidth * 0.70;
+        const cropHeight = videoHeight * 0.45;
+        const cropX = (videoWidth - cropWidth) / 2;
+        const cropY = (videoHeight - cropHeight) / 2;
+        
+        canvas.width = 640;
+        canvas.height = 320;
         const ctx = canvas.getContext('2d');
         
-        // Professional Image Pre-processing for AI clarity
-        ctx.filter = 'grayscale(100%) contrast(150%) brightness(110%)';
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        // Apply professional image pre-processing to ensure crystal-clear black-on-white text
+        ctx.filter = 'grayscale(100%) contrast(170%) brightness(115%)';
+        
+        // Draw the cropped center portion of the video to the canvas (zoomed close-up of plate)
+        ctx.drawImage(
+            video, 
+            cropX, cropY, cropWidth, cropHeight, // Source crop
+            0, 0, canvas.width, canvas.height    // Destination full canvas
+        );
         
         const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
         const formData = new FormData();
