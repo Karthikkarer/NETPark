@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Star, Send, CheckCircle, Car } from 'lucide-react';
 import axios from 'axios';
+const getBaseURL = () => {
+    if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+    return 'http://localhost:5000/api';
+};
 
-const api = axios.create({ baseURL: `http://${window.location.hostname}:5000/api` });
+const api = axios.create({ baseURL: getBaseURL() });
 
 export default function SubmitReview() {
     const [searchParams] = useSearchParams();

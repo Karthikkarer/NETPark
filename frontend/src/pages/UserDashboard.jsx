@@ -3,8 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Car, Bike, Wallet, Calendar, MapPin, Search, LogOut, CheckCircle2, History, CreditCard, Navigation, Clock, Sparkles, User, Sun, Moon } from 'lucide-react';
 import axios from 'axios';
+const getBaseURL = () => {
+    if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+    return 'http://localhost:5000/api';
+};
 
-const api = axios.create({ baseURL: `http://${window.location.hostname}:5000/api` });
+const api = axios.create({ baseURL: getBaseURL() });
 
 const getDynamicPricingContext = (bikeBase, carBase, selectedHour, dateString, occupancyPercentage) => {
     let surge = 1.0;
