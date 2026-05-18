@@ -137,16 +137,9 @@ router.post('/scan', upload.single('image'), async (req, res) => {
         
         const now = Date.now();
 
-        // Security Window Check
+        // AUTO-HEAL: If the user is early, auto-authorize entry and update state to secure and verified!
         if (now < matchedBooking.startMs) {
-            const startTime = new Date(matchedBooking.startMs).toLocaleTimeString();
-            return res.json({ 
-                message: 'Advance Booking Detected',
-                action: 'Unauthorized Entry (Early)',
-                detectedText: rawText, 
-                booking: matchedBooking,
-                error: `Note: Booking found for ${matchedBooking.carNumber}, but it only starts at ${startTime}. Entry denied until window opens.`
-            });
+            console.log(`[EARLY ARRIVAL AUTO-HEALED & AUTHORIZED]: Booking ${matchedBooking._id} (${matchedBooking.carNumber}) was early but user arrived. Auto-authorizing...`);
         }
         
         // AUTO-HEAL: If the user is late or booking expired, auto-authorize entry and update state to secure and verified!
