@@ -17,8 +17,8 @@ const run = (cmd, options = {}) => {
 };
 
 console.log("\n==================================================");
-2: console.log("🚀 NETPARK AUTONOMOUS GITHUB DEPLOYMENT PIPELINE");
-3: console.log("==================================================\n");
+console.log("🚀 NETPARK AUTONOMOUS GITHUB DEPLOYMENT PIPELINE");
+console.log("==================================================\n");
 
 // Check if Git is installed
 let gitInstalled = false;

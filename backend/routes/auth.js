@@ -595,7 +595,7 @@ router.post('/send-booking-receipt', async (req, res) => {
             if (exactReviewTimeoutMs > 0) {
                 setTimeout(async () => {
                     try {
-                        const reviewLink = `http://localhost:5173/submit-review?email=${encodeURIComponent(validEmail)}&phone=${encodeURIComponent(finalPhone || '')}&txn=${newBooking._id}&slot=${encodeURIComponent(slotName || '')}`;
+                        const reviewLink = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/submit-review?email=${encodeURIComponent(validEmail)}&phone=${encodeURIComponent(finalPhone || '')}&txn=${newBooking._id}&slot=${encodeURIComponent(slotName || '')}`;
                         await transporter.sendMail({
                             from: `"NETPark Authentic Gateway" <${process.env.SMTP_EMAIL}>`,
                             to: validEmail,
