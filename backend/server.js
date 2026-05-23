@@ -16,6 +16,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// API Health Check Route
+app.get('/', (req, res) => {
+    res.status(200).json({ 
+        message: 'NETPark API Server is Live & Running! 🚀', 
+        status: 'Operational', 
+        endpoints: ['/api/auth', '/api/bookings', '/api/slots', '/api/wallet', '/api/alpr']
+    });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
